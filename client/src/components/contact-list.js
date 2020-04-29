@@ -1,9 +1,11 @@
 import React from 'react';
 
-export default ContactList = () => {
+const ContactList = () => {
   return (
     <div>
       <p>No contacts here</p>
     </div>
   );
 };
+
+export default ContactList;
