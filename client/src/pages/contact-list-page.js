@@ -13,7 +13,7 @@ export default function ContactListPage() {
         const response = await axios.get('http://localhost:3030/contacts');
         dispatch({
           type: 'FETCH_CONTACTS',
-          payload: response.data.data || response.data,
+          payload: response.data.data || response.data, // in case pagination is disabled
         });
       } catch (error) {
         flashErrorMessage(dispatch, error);
