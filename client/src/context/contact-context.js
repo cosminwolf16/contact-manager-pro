@@ -19,6 +19,12 @@ function reducer(state, action) {
         contact: {},
       };
     }
+    case 'FLASH_MESSAGE': {
+      return {
+        ...state,
+        message: payload,
+      };
+    }
     default:
       throw new Error();
   }
