@@ -1,22 +1,26 @@
-import React, { createContext, useReducer } from 'react';
+import React, { useReducer, createContext } from 'react';
 
 export const ContactContext = createContext();
 
 const initialState = {
   contacts: [],
   contact: {}, // selected or new
-  message: {}, // {type: 'succes/fail', title: 'Info|Error' content: 'lorem ipsum' }
+  message: {}, // { type: 'success|fail', title:'Info|Error' content:'lorem ipsum'}
 };
 
 function reducer(state, action) {
-  const { type, payload } = action;
-
-  switch (type) {
+  switch (action.type) {
     case 'FETCH_CONTACTS': {
       return {
         ...state,
-        contacts: payload,
+        contacts: action.payload,
         contact: {},
+      };
+    }
+    case 'FLASH_MESSAGE': {
+      return {
+        ...state,
+        message: action.payload,
       };
     }
     case 'CREATE_CONTACT': {
@@ -28,6 +32,13 @@ function reducer(state, action) {
           title: 'Success',
           content: 'New Contact created!',
         },
+      };
+    }
+    case 'FETCH_CONTACT': {
+      return {
+        ...state,
+        contact: action.payload,
+        message: {},
       };
     }
     case 'UPDATE_CONTACT': {
@@ -44,10 +55,16 @@ function reducer(state, action) {
         },
       };
     }
-    case 'FLASH_MESSAGE': {
+    case 'DELETE_CONTACT': {
+      const { _id, email } = action.payload;
       return {
         ...state,
-        message: payload,
+        contacts: state.contacts.filter((item) => item._id !== _id),
+        message: {
+          type: 'success',
+          title: 'Delete Successful',
+          content: `Contact "${email}" has been deleted!`,
+        },
       };
     }
     default:
