@@ -30,6 +30,20 @@ function reducer(state, action) {
         },
       };
     }
+    case 'UPDATE_CONTACT': {
+      const contact = action.payload;
+      return {
+        ...state,
+        contacts: state.contacts.map((item) =>
+          item._id === contact._id ? contact : item
+        ),
+        message: {
+          type: 'success',
+          title: 'Update Successful',
+          content: `Contact "${contact.email}" has been updated!`,
+        },
+      };
+    }
     case 'FLASH_MESSAGE': {
       return {
         ...state,
