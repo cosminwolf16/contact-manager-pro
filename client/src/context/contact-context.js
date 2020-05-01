@@ -19,6 +19,17 @@ function reducer(state, action) {
         contact: {},
       };
     }
+    case 'CREATE_CONTACT': {
+      return {
+        ...state,
+        contacts: [...state.contacts, action.payload],
+        message: {
+          type: 'success',
+          title: 'Success',
+          content: 'New Contact created!',
+        },
+      };
+    }
     case 'FLASH_MESSAGE': {
       return {
         ...state,
