@@ -1,13 +1,37 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Form, Grid, Button } from 'semantic-ui-react';
 import { useForm } from 'react-hook-form';
 import classnames from 'classnames';
+import axios from 'axios';
+import { Redirect } from 'react-router-dom';
+import { flashErrorMessage } from './flash-message';
 import { ContactContext } from '../context/contact-context';
 
 export default function ContactForm() {
-  const [state] = useContext(ContactContext);
+  const [state, dispatch] = useContext(ContactContext);
   const { register, errors, handleSubmit } = useForm();
-  const onSubmit = (data) => console.log(data);
+  const [redirect, setRedirect] = useState(false);
+
+  const createContact = async (data) => {
+    try {
+      const response = await axios.post('http://localhost:3030/contacts', data);
+      dispatch({
+        type: 'CREATE_CONTACT',
+        payload: response.data,
+      });
+      setRedirect(true);
+    } catch (error) {
+      flashErrorMessage(dispatch, error);
+    }
+  };
+
+  const onSubmit = async (data) => {
+    await createContact(data);
+  };
+
+  if (redirect) {
+    return <Redirect to='/' />;
+  }
 
   return (
     <Grid centered columns={2}>
