@@ -1,8 +1,27 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Card, Button, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { ContactContext } from '../context/contact-context';
+import { flashErrorMessage } from './flash-message';
 
 export default function ContactCard({ contact }) {
+  const [state, dispatch] = useContext(ContactContext);
+
+  const deleteContact = async (id) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:3030/contacts/${id}`
+      );
+      dispatch({
+        type: 'DELETE_CONTACT',
+        payload: response.data,
+      });
+    } catch (error) {
+      flashErrorMessage(dispatch, error);
+    }
+  };
+
   return (
     <Card>
       <Card.Content>
@@ -28,7 +47,7 @@ export default function ContactCard({ contact }) {
           >
             Edit
           </Button>
-          <Button basic color='red'>
+          <Button basic color='red' onClick={() => deleteContact(contact._id)}>
             Delete
           </Button>
         </div>
